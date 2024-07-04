@@ -1,0 +1,21 @@
+---
+const colors = [
+  { color: "#f94144", hover: "#c62428" },
+  { color: "#e9bc3f", hover: "#DAA520" },
+  { color: "#10a2f5", hover: "#103ff5" },
+  { color: "#24d05a", hover: "#208841" },
+];
+
+interface Props {
+  href: string;
+}
+
+const { href } = Astro.props;
+const randomColor = colors[Math.floor(Math.random() * colors.length)];
+---
+
+<a
+  href={href}
+  style={`--underline-color: ${randomColor["color"]}; --underline-hover: ${randomColor["hover"]}`}
+  ><slot /></a
+>
