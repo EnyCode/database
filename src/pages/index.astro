@@ -1,7 +1,49 @@
 ---
+import Link from "../components/Link.astro";
 import Layout from "../layouts/Layout.astro";
+
+const posts = await Astro.glob("../pages/*.mdx");
 ---
 
-<Layout title="Index">
-  <h1>hey</h1>
+<Layout
+  title="Database Index"
+  count={0}
+  description="A collection of random data and information."
+>
+  <ul id="items">
+    {
+      posts.map((post) => {
+        <li>
+          <Link href="/01">
+            <span class="count">03.</span>
+            <span class="title">{post.frontmatter.title}</span>
+          </Link>
+          <br />
+          <span class="description">
+            A speech about cultss and their effects on children.
+          </span>
+        </li>;
+      })
+    }
+    <li>
+      <Link href="/01"
+        ><span class="count">01.</span>
+        <span class="title">Cult Speech</span></Link
+      >
+      <br />
+      <span class="description"
+        >A speech about cults and their effects on children.
+      </span>
+    </li>
+    <li>
+      <Link href="/02"
+        ><span class="count">02.</span>
+        <span class="title">Other Thing</span></Link
+      >
+      <br />
+      <span class="description"
+        >Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      </span>
+    </li>
+  </ul>
 </Layout>

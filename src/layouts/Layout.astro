@@ -5,9 +5,12 @@ const posts = await Astro.glob("../pages/*.mdx");
 
 interface Props {
   title: string;
+  count: number;
+  description: string;
 }
 console.log(posts);
-const { title } = Astro.props;
+const { title, count, description } = Astro.props;
+console.log(count);
 ---
 
 <!doctype html>
@@ -24,46 +27,11 @@ const { title } = Astro.props;
   </head>
   <body>
     <h1 id="title">Database</h1>
-    <h1 id="count">00</h1>
-    <span id="description">A collection of random data and information.</span>
+    <h1 id="count">{count.toString().padStart(2, "0")}</h1>
+    <span id="description">{description}</span>
     <br />
     <hr />
-    <ul id="items">
-      {
-        posts.map((post) => {
-          <li>
-            <Link href="/01">
-              <span class="count">03.</span>
-              <span class="title">Culty Speech</span>
-            </Link>
-            <br />
-            <span class="description">
-              A speech about cultss and their effects on children.
-            </span>
-          </li>;
-        })
-      }
-      <li>
-        <Link href="/01"
-          ><span class="count">01.</span>
-          <span class="title">Cult Speech</span></Link
-        >
-        <br />
-        <span class="description"
-          >A speech about cults and their effects on children.
-        </span>
-      </li>
-      <li>
-        <Link href="/02"
-          ><span class="count">02.</span>
-          <span class="title">Other Thing</span></Link
-        >
-        <br />
-        <span class="description"
-          >Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        </span>
-      </li>
-    </ul>
+    <slot />
     <footer>
       &copy; {new Date().getFullYear()} Eny. <a
         href="https://github.com/EnyCode/database"
@@ -83,7 +51,7 @@ const { title } = Astro.props;
   // #region Fonts
   @font-face {
     font-family: "iA Writer Mono";
-    src: url("/fonts/iAWirterMonoS-Regular.woff2") format("woff2");
+    src: url("/fonts/iAWriterMonoS-Regular.woff2") format("woff2");
     font-weight: normal;
     font-style: normal;
     font-display: swap;

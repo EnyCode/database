@@ -1,0 +1,19 @@
+---
+import Link from "../components/Link.astro";
+import Layout from "../layouts/Layout.astro";
+
+const posts = await Astro.glob("../pages/*.mdx");
+---
+
+<Layout title="Database Index" count={1} description="A speech on cults. ">
+  <br />
+  <section id="content">
+    <slot />
+  </section>
+</Layout>
+<style>
+  #content {
+    width: 40%;
+    margin: auto;
+  }
+</style>
