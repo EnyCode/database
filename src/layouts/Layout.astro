@@ -16,11 +16,11 @@ const { title, count, description } = Astro.props;
     <script type="module" src="https://unpkg.com/rough-notation?module"
     ></script>
     <meta charset="UTF-8" />
-    <meta name="description" content="Astro description" />
+    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    <title>{title} | Database</title>
   </head>
   <body>
     <h1 id="title">Database</h1>

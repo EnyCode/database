@@ -4,11 +4,11 @@ import Layout from "../layouts/Layout.astro";
 
 const all = [
   {
-    title: "Arcade Progress",
+    title: "Arcade Ticket Calc",
     description:
-      "A Hack Club Arcade progress viewer with a custom end date and stats.",
+      "A Hack Club Arcade calculator(?) with a custom end date and stats.",
     count: "02",
-    url: import.meta.env.BASE_URL + "/02-arcade-progress",
+    url: import.meta.env.BASE_URL + "/02-arcade-calc",
   },
 ];
 const posts = await Astro.glob("../pages/*.mdx");
@@ -25,7 +25,7 @@ all.sort((a, b) => +a.count - +b.count);
 ---
 
 <Layout
-  title="Database Index"
+  title="Index"
   count={0}
   description="A collection of random data and information."
 >
