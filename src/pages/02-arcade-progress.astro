@@ -45,7 +45,11 @@
         <h1 id="tickets">120 🎟️</h1>
       </div>
 
-      <div id="progress"></div>
+      <span class="label">Your Progress:</span>
+      <div id="progress">
+        <span id="current"></span>
+        <span id="ideal"></span>
+      </div>
     </section>
     <footer>
       &copy; {new Date().getFullYear()} Eny. <a
@@ -57,14 +61,15 @@
 </html>
 <script>
   const goal = document.getElementById("goal");
-  const tickets = 27;
+  const tickets = 87;
   const progress = document.getElementById("progress");
+  const current = document.getElementById("current");
+  const ideal = document.getElementById("ideal");
+  const startDate = new Date("2024-06-18");
+  const endDate = document.getElementById("date");
 
-  if (!goal) {
-    throw new Error("Goal input not found.");
-  }
-  if (!progress) {
-    throw new Error("Progress bar not found.");
+  if (!goal || !progress || !current || !ideal || !endDate) {
+    throw new Error("Element not found.");
   }
   goal.onkeydown = function (evt) {
     let code = evt.keyCode;
@@ -74,13 +79,17 @@
     return true;
   };
   goal.onchange = function (evt) {
-    const value = parseInt(evt.target.value);
-    if (isNaN(value)) {
-      return;
-    }
-    progress.style.background = `linear-gradient(to right, #09afb4 0%, #09afb4 ${
-      (tickets / value) * 100
-    }%, #f3e5c3 ${(tickets / value) * 100}%, #f3e5c3 100%)`;
+    let value = parseInt(evt.target.value);
+    current.style.width = `${(tickets / value) * 100}%`;
+
+    const totalDays = Math.ceil(
+      (new Date(endDate.value) - startDate) / (1000 * 60 * 60 * 24)
+    );
+    const passedDays = Math.ceil(
+      (new Date() - startDate) / (1000 * 60 * 60 * 24)
+    );
+
+    ideal.style.width = `${(passedDays / totalDays) * 100}%`;
   };
 
   //progress.style.background = `linear-gradient(to right, #09afb4 0%, #09afb4 50%, #f3e5c3 50%, #f3e5c3 100%)`;
@@ -176,14 +185,43 @@
       }
     }
 
+    .label {
+      display: block;
+      margin-left: 27.5%;
+      margin-top: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
     #progress {
       width: 45%;
       margin: auto;
-      margin-top: 3rem;
-      background: linear-gradient(to right, #f3e5c3 0%, #f3e5c3 100%);
-      border-radius: 6px;
-      padding: 1rem;
-      transition: ease-in-out background 1s;
+      background-color: #f3e5c3;
+      border-radius: 10px;
+      height: 2rem;
+      overflow-x: hidden;
+
+      #current {
+        width: 50%;
+        background-color: #09afb4;
+        border-radius: 10px;
+        height: 2rem;
+        position: relative;
+        z-index: 0;
+        transition: ease-in-out width 0.4s;
+        display: block;
+      }
+
+      #ideal {
+        width: 30%;
+        background-color: #ff5c00;
+        border-radius: 10px;
+        height: 2rem;
+        position: relative;
+        top: -2rem;
+        z-index: 1;
+        transition: ease-in-out width 0.4s;
+        display: block;
+      }
     }
 
     .shadow {
