@@ -44,6 +44,8 @@
         <br />
         <h1 id="tickets">120 🎟️</h1>
       </div>
+
+      <div id="progress"></div>
     </section>
     <footer>
       &copy; {new Date().getFullYear()} Eny. <a
@@ -55,16 +57,33 @@
 </html>
 <script>
   const goal = document.getElementById("goal");
+  const tickets = 27;
+  const progress = document.getElementById("progress");
+
   if (!goal) {
     throw new Error("Goal input not found.");
   }
+  if (!progress) {
+    throw new Error("Progress bar not found.");
+  }
   goal.onkeydown = function (evt) {
-    let code = evt.which ? evt.which : evt.keyCode;
+    let code = evt.keyCode;
     if (code > 31 && (code < 48 || code > 57)) {
       return false;
     }
     return true;
   };
+  goal.onchange = function (evt) {
+    const value = parseInt(evt.target.value);
+    if (isNaN(value)) {
+      return;
+    }
+    progress.style.background = `linear-gradient(to right, #09afb4 0%, #09afb4 ${
+      (tickets / value) * 100
+    }%, #f3e5c3 ${(tickets / value) * 100}%, #f3e5c3 100%)`;
+  };
+
+  //progress.style.background = `linear-gradient(to right, #09afb4 0%, #09afb4 50%, #f3e5c3 50%, #f3e5c3 100%)`;
 </script>
 <style is:global lang="scss">
   :root {
@@ -155,6 +174,16 @@
       h2 {
         text-align: center;
       }
+    }
+
+    #progress {
+      width: 45%;
+      margin: auto;
+      margin-top: 3rem;
+      background: linear-gradient(to right, #f3e5c3 0%, #f3e5c3 100%);
+      border-radius: 6px;
+      padding: 1rem;
+      transition: ease-in-out background 1s;
     }
 
     .shadow {
