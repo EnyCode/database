@@ -33,7 +33,7 @@ all.sort((a, b) => +a.count - +b.count);
     {
       all.map((post) => (
         <li>
-          <Link href={post.url}>
+          <Link href={post.url} includeBase={false}>
             <span class="count">{post.count}.</span>
             <span class="title">{post.title}</span>
           </Link>
