@@ -17,5 +17,5 @@ const randomColor = colors[Math.floor(Math.random() * colors.length)];
 <a
   href=`${import.meta.env.BASE_URL}${href}`
   style={`--underline-color: ${randomColor["color"]}; --underline-hover: ${randomColor["hover"]}`}
-  ><slot /></a
+  ><slot />{import.meta.env.BASE_URL}</a
 >
