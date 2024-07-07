@@ -1,5 +1,9 @@
 ---
-
+interface Props {
+  title: string;
+  count: number;
+  description: string;
+}
 ---
 
 <!doctype html>
@@ -194,7 +198,9 @@
     !connectBtn ||
     !hoursPerDay ||
     !idealDaily ||
-    !daysLeft
+    !daysLeft ||
+    // should never error because we set a default value
+    !endDate.valueAsDate
   ) {
     throw new Error("Element not found.");
   }
@@ -203,11 +209,13 @@
   connectSlackBtn.style.display = "none";
 
   let goalValue = parseInt(goal.value);
-  let currentPercent = Math.min((tickets / goalValue) * 100, 100);
+  let currentPercent = Math.min((+tickets / goalValue) * 100, 100);
   let totalDays = Math.ceil(
-    (endDate.valueAsDate - startDate) / (1000 * 60 * 60 * 24)
+    (+endDate.valueAsDate - +startDate) / (1000 * 60 * 60 * 24)
   );
-  let passedDays = Math.ceil((new Date() - startDate) / (1000 * 60 * 60 * 24));
+  let passedDays = Math.ceil(
+    (+new Date() - +startDate) / (1000 * 60 * 60 * 24)
+  );
   let idealPercent = Math.min((passedDays / totalDays) * 100, 100);
 
   goal.onkeydown = function (evt) {
@@ -216,17 +224,25 @@
     }
   };
   goal.onchange = function (evt) {
-    goalValue = parseInt(evt.target.value);
-    currentPercent = Math.min((tickets / goalValue) * 100, 100);
+    if (!evt.target) {
+      throw new Error("Invalid event target.");
+      return;
+    }
+    const target = evt.target as HTMLInputElement;
+    goalValue = parseInt(target.value);
+    currentPercent = Math.min((+tickets / goalValue) * 100, 100);
     localStorage.setItem("goal", goalValue.toString());
-
     update();
   };
   endDate.onchange = function (evt) {
+    if (!endDate.valueAsDate) {
+      throw new Error("Invalid date.");
+      return;
+    }
     totalDays = Math.ceil(
-      (endDate.valueAsDate - startDate) / (1000 * 60 * 60 * 24)
+      (+endDate.valueAsDate - +startDate) / (1000 * 60 * 60 * 24)
     );
-    passedDays = Math.ceil((new Date() - startDate) / (1000 * 60 * 60 * 24));
+    passedDays = Math.ceil((+new Date() - +startDate) / (1000 * 60 * 60 * 24));
     idealPercent = Math.min((passedDays / totalDays) * 100, 100);
     localStorage.setItem("endDate", endDate.value);
 
@@ -269,13 +285,16 @@
       (1 - currentPercent / 100) * goalValue
     )} 🎟️)`;
 
-    hoursPerDay.innerHTML = `${Math.round((tickets / passedDays) * 10) / 10}`;
+    hoursPerDay.innerHTML = `${Math.round((+tickets / passedDays) * 10) / 10}`;
     idealDaily.innerHTML = `${Math.round((goalValue / totalDays) * 10) / 10}`;
     daysLeft.innerHTML = `${totalDays - passedDays}`;
   }
 
   function addTicket() {
-    tickets++;
+    if (!ticketCount) {
+      throw new Error("Element not found.");
+    }
+    tickets = +tickets + 1;
     currentPercent = Math.min((tickets / goalValue) * 100, 100);
     ticketCount.innerHTML = ` ${tickets} 🎟️ `;
     localStorage.setItem("tickets", tickets.toString());
@@ -284,7 +303,10 @@
   }
 
   function removeTicket() {
-    tickets--;
+    if (!ticketCount) {
+      throw new Error("Element not found.");
+    }
+    tickets = +tickets - 1;
     currentPercent = Math.min((tickets / goalValue) * 100, 100);
     ticketCount.innerHTML = ` ${tickets} 🎟️ `;
     localStorage.setItem("tickets", tickets.toString());
@@ -295,13 +317,13 @@
   ticketBtn.onclick = addTicket;
   removeTicketBtn.onclick = removeTicket;
   ticketCount.innerHTML = ` ${tickets} 🎟️ `;
-  connectSlackBtn.onclick = () => slackDialog.showModal();
+  /*connectSlackBtn.onclick = () => slackDialog.showModal();
   connectBtn.onclick = function () {
     slackDialog.close();
     localStorage.setItem("slackId", document.getElementById("id").value);
     localStorage.setItem("apiKey", document.getElementById("api").value);
     connectSlackBtn.style.display = "none";
-  };
+  };*/
 
   async function updateWithSlack() {
     const statsURL = "https://hackhour.hackclub.com/api/stats/" + slackId;

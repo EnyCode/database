@@ -17,11 +17,11 @@ posts.map((post) => {
     title: post.frontmatter.title,
     description: post.frontmatter.description,
     count: post.frontmatter.count,
-    url: post.url,
+    url: post.url || "/",
   });
 });
 
-all.sort((a, b) => a.count - b.count);
+all.sort((a, b) => +a.count - +b.count);
 ---
 
 <Layout
