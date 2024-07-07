@@ -21,7 +21,9 @@
     <span id="description">A ticket counter for arcade. </span>
     <br />
     <section id="content">
-      <h1 class="shadow">Arcade</h1>
+      <a href="https://hackclub.com/arcade" class="empty"
+        ><h1 class="shadow">Arcade</h1></a
+      >
       <h1>Ticket Counter</h1>
 
       <div id="info">
@@ -44,9 +46,11 @@
         </div>
         <br />
         <h1 id="tickets">
-          <button class="empty pulse" id="remove-ticket-btn">➖</button>
-          <span id="ticket-count">0 🎟️</span>
-          <button class="empty pulse" id="ticket-btn">➕</button>
+          <button class="empty pulse" id="remove-ticket-btn">➖</button><span
+            id="ticket-count"
+          >
+            0 🎟️
+          </span><button class="empty pulse" id="ticket-btn">➕</button>
         </h1>
         <div class="center">
           <button class="empty" id="slack-connect"
@@ -85,6 +89,21 @@
           </span>
         </div>
       </div>
+      <div id="stats">
+        <h2>Stats</h2>
+        <div>
+          <span class="stat" id="hpd">0</span>
+          <span class="stat-label">hours per day on average. </span>
+        </div>
+        <div>
+          <span class="stat" id="ideal-daily">5</span>
+          <span class="stat-label">ideal daily tickets. </span>
+        </div>
+        <div>
+          <span class="stat" id="days-left">54</span>
+          <span class="stat-label">days left. </span>
+        </div>
+      </div>
       <dialog id="slack-dialog">
         <h1>Connect your <span class="shadow">Slack!</span></h1>
         <p>
@@ -105,16 +124,32 @@
         <br />
         <button id="connect" class="pulse slackey">Connect!</button>
       </dialog>
+      <footer>
+        &copy; {new Date().getFullYear()} Eny. <a
+          href="https://github.com/EnyCode/database"
+          >This website is open source!</a
+        >
+      </footer>
+      <br />
     </section>
-    <footer>
-      &copy; {new Date().getFullYear()} Eny. <a
-        href="https://github.com/EnyCode/database"
-        >This website is open source!</a
-      >
-    </footer>
   </body>
 </html>
 <script>
+  window.addEventListener(
+    "scroll",
+    () => {
+      document.body.style.setProperty(
+        "--scroll",
+        `${window.pageYOffset / (document.body.offsetHeight - window.innerHeight)}`
+      );
+    },
+    false
+  );
+  document.body.style.setProperty(
+    "--scroll",
+    `${window.pageYOffset / (document.body.offsetHeight - window.innerHeight)}`
+  );
+
   const goal = document.getElementById("goal") as HTMLInputElement;
   goal.value = localStorage.getItem("goal") || "150";
   let tickets = localStorage.getItem("tickets") || 0;
@@ -135,6 +170,9 @@
   ) as HTMLDialogElement;
   const connectSlackBtn = document.getElementById("slack-connect");
   const connectBtn = document.getElementById("connect");
+  const hoursPerDay = document.getElementById("hpd");
+  const idealDaily = document.getElementById("ideal-daily");
+  const daysLeft = document.getElementById("days-left");
 
   let slackId = localStorage.getItem("slackId");
   let apiKey = localStorage.getItem("apiKey");
@@ -153,10 +191,16 @@
     !removeTicketBtn ||
     !slackDialog ||
     !connectSlackBtn ||
-    !connectBtn
+    !connectBtn ||
+    !hoursPerDay ||
+    !idealDaily ||
+    !daysLeft
   ) {
     throw new Error("Element not found.");
   }
+
+  // disable slack stuff bc CORS means we cant send requests
+  connectSlackBtn.style.display = "none";
 
   let goalValue = parseInt(goal.value);
   let currentPercent = Math.min((tickets / goalValue) * 100, 100);
@@ -197,7 +241,10 @@
       !currentText ||
       !goalText ||
       !idealText ||
-      !remainingText
+      !remainingText ||
+      !hoursPerDay ||
+      !idealDaily ||
+      !daysLeft
     ) {
       throw new Error("Element not found.");
     }
@@ -221,12 +268,16 @@
     remainingText.innerText = `${100 - Math.round(currentPercent)}% (${Math.round(
       (1 - currentPercent / 100) * goalValue
     )} 🎟️)`;
+
+    hoursPerDay.innerHTML = `${Math.round((tickets / passedDays) * 10) / 10}`;
+    idealDaily.innerHTML = `${Math.round((goalValue / totalDays) * 10) / 10}`;
+    daysLeft.innerHTML = `${totalDays - passedDays}`;
   }
 
   function addTicket() {
     tickets++;
     currentPercent = Math.min((tickets / goalValue) * 100, 100);
-    ticketCount.innerHTML = `${tickets} 🎟️`;
+    ticketCount.innerHTML = ` ${tickets} 🎟️ `;
     localStorage.setItem("tickets", tickets.toString());
 
     update();
@@ -235,7 +286,7 @@
   function removeTicket() {
     tickets--;
     currentPercent = Math.min((tickets / goalValue) * 100, 100);
-    ticketCount.innerHTML = `${tickets} 🎟️`;
+    ticketCount.innerHTML = ` ${tickets} 🎟️ `;
     localStorage.setItem("tickets", tickets.toString());
 
     update();
@@ -243,7 +294,7 @@
 
   ticketBtn.onclick = addTicket;
   removeTicketBtn.onclick = removeTicket;
-  ticketCount.innerHTML = `${tickets} 🎟️`;
+  ticketCount.innerHTML = ` ${tickets} 🎟️ `;
   connectSlackBtn.onclick = () => slackDialog.showModal();
   connectBtn.onclick = function () {
     slackDialog.close();
@@ -296,7 +347,6 @@
   #content {
     background-color: #fbefd6;
     width: 100%;
-    height: 100vh;
     padding-top: 5rem;
     font-family: "Gaegu";
     font-size: 1.4rem;
@@ -335,6 +385,7 @@
       font-family: inherit;
       display: block;
       width: 27rem;
+      color: inherit;
     }
 
     button.slackey {
@@ -355,9 +406,9 @@
 
       #tickets {
         font-size: 66px;
-        width: 130%;
+        //width: 130%;
         position: relative;
-        left: -15%;
+        //left: -15%;
 
         button {
           font-size: 40px;
@@ -405,9 +456,37 @@
             }
           }
         }
+        @media (max-width: 768px) {
+          flex-direction: column;
+
+          div.smol {
+            margin: auto;
+
+            input#goal {
+              max-width: 10rem;
+            }
+          }
+
+          .vl {
+            display: none;
+          }
+        }
       }
       h2 {
         text-align: center;
+      }
+
+      @media (max-width: 768px) {
+        margin-top: 1rem;
+
+        #tickets {
+          font-size: 56px;
+
+          button {
+            font-size: 30px;
+            bottom: 8px;
+          }
+        }
       }
     }
 
@@ -415,16 +494,16 @@
       margin-left: 27.5%;
       margin-top: 0.5rem;
 
-      @media (max-width: 512px) {
-        margin-left: 5%;
+      @media (max-width: 1100px) {
+        margin-left: 20%;
       }
 
       @media (max-width: 900px) {
         margin-left: 15%;
       }
 
-      @media (max-width: 1100px) {
-        margin-left: 20%;
+      @media (max-width: 512px) {
+        margin-left: 5%;
       }
 
       .color {
@@ -556,13 +635,18 @@
       }
     }
 
-    a {
+    a:not(.empty) {
       color: #ef3553;
       text-decoration: underline;
 
       &:hover {
         text-decoration: underline wavy;
       }
+    }
+
+    a.empty {
+      text-decoration: none;
+      color: inherit;
     }
 
     .center {
@@ -577,6 +661,50 @@
 
       &:hover {
         text-decoration: underline wavy;
+      }
+    }
+
+    #stats {
+      width: 45%;
+      margin: auto;
+
+      @media (max-width: 1100px) {
+        width: 60%;
+      }
+
+      @media (max-width: 900px) {
+        width: 70%;
+      }
+
+      @media (max-width: 512px) {
+        width: 80%;
+      }
+
+      h2 {
+        margin-bottom: 0.5rem;
+      }
+
+      div {
+        .stat {
+          font-size: 60px;
+          font-family: "Slackey";
+        }
+
+        .stat-label {
+          font-size: 30px;
+        }
+      }
+
+      :nth-child(3n of div) > .stat {
+        color: #cc6ce7;
+      }
+
+      :nth-child(3n - 1 of div) > .stat {
+        color: #09afb4;
+      }
+
+      :nth-child(3n - 2 of div) > .stat {
+        color: #ff5c00;
       }
     }
 
@@ -678,6 +806,14 @@
     }
   }
 
+  @keyframes mobileCount {
+    to {
+      top: -1rem;
+      right: 3rem;
+      font-size: 3rem;
+    }
+  }
+
   #title {
     text-align: center;
     font-size: 4rem;
@@ -693,8 +829,15 @@
     right: 50%;
     transform: translate(calc(50% + 7px), -1px);
     top: 7.3rem;
-    position: absolute;
-    animation: count 3s ease-in-out;
+    position: fixed;
+    animation: count 1s ease-in-out forwards;
+    animation-play-state: paused;
+    animation-delay: calc(var(--scroll) * -1s);
+
+    @media (max-width: 768px) {
+      animation-duration: 0.5s;
+      animation-name: mobileCount;
+    }
   }
 
   #placeholder {
@@ -741,17 +884,6 @@
     margin-top: 3rem;
     color: var(--text-dark-grey);
     font-size: 0.9rem;
-  }
-
-  a {
-    color: inherit;
-    text-decoration-thickness: 2px;
-    text-decoration-color: var(--underline-color);
-    transition: text-decoration-color 0.3s;
-
-    &:hover {
-      text-decoration-color: var(--underline-hover);
-    }
   }
 
   hr {
