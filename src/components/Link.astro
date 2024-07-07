@@ -11,7 +11,10 @@ interface Props {
   includeBase?: boolean;
 }
 
-const { href, includeBase = true } = Astro.props;
+let { href, includeBase = true } = Astro.props;
+if (href.startsWith("http")) {
+  includeBase = false;
+}
 const randomColor = colors[Math.floor(Math.random() * colors.length)];
 ---
 
