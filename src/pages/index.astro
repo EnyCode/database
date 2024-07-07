@@ -2,7 +2,26 @@
 import Link from "../components/Link.astro";
 import Layout from "../layouts/Layout.astro";
 
+const all = [
+  {
+    title: "Arcade Progress",
+    description:
+      "A Hack Club Arcade progress viewer with a custom end date and stats.",
+    count: "02",
+    url: "/02-arcade-progress",
+  },
+];
 const posts = await Astro.glob("../pages/*.mdx");
+posts.map((post) => {
+  all.push({
+    title: post.frontmatter.title,
+    description: post.frontmatter.description,
+    count: post.frontmatter.count,
+    url: post.url,
+  });
+});
+
+all.sort((a, b) => a.count - b.count);
 ---
 
 <Layout
@@ -12,38 +31,16 @@ const posts = await Astro.glob("../pages/*.mdx");
 >
   <ul id="items">
     {
-      posts.map((post) => {
+      all.map((post) => (
         <li>
-          <Link href="/01">
-            <span class="count">03.</span>
-            <span class="title">{post.frontmatter.title}</span>
+          <Link href={post.url}>
+            <span class="count">{post.count}.</span>
+            <span class="title">{post.title}</span>
           </Link>
           <br />
-          <span class="description">
-            A speech about cultss and their effects on children.
-          </span>
-        </li>;
-      })
+          <span class="description">{post.description}</span>
+        </li>
+      ))
     }
-    <li>
-      <Link href="/01"
-        ><span class="count">01.</span>
-        <span class="title">Cult Speech</span></Link
-      >
-      <br />
-      <span class="description"
-        >A speech about cults and their effects on children.
-      </span>
-    </li>
-    <li>
-      <Link href="/02"
-        ><span class="count">02.</span>
-        <span class="title">Other Thing</span></Link
-      >
-      <br />
-      <span class="description"
-        >Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      </span>
-    </li>
   </ul>
 </Layout>

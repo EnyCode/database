@@ -1,16 +1,13 @@
 ---
 import Link from "../components/Link.astro";
 
-const posts = await Astro.glob("../pages/*.mdx");
-
 interface Props {
   title: string;
   count: number;
   description: string;
 }
-console.log(posts);
+
 const { title, count, description } = Astro.props;
-console.log(count);
 ---
 
 <!doctype html>
