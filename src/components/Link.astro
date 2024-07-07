@@ -8,14 +8,15 @@ const colors = [
 
 interface Props {
   href: string;
+  includeBase?: boolean;
 }
 
-const { href } = Astro.props;
+const { href, includeBase = true } = Astro.props;
 const randomColor = colors[Math.floor(Math.random() * colors.length)];
 ---
 
 <a
-  href=`${import.meta.env.BASE_URL}${href}`
+  href=`${includeBase ? import.meta.env.BASE_URL : ""}${href}`
   style={`--underline-color: ${randomColor["color"]}; --underline-hover: ${randomColor["hover"]}`}
-  ><slot />{import.meta.env.BASE_URL}</a
+  ><slot /></a
 >
