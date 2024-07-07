@@ -27,7 +27,7 @@
         <div id="inputs">
           <div class="smol">
             <label for="goal">Ticket Goal: </label>
-            <input type="number" id="goal" name="goal" />
+            <input type="number" id="goal" name="goal" value="150" />
           </div>
           <div class="vl"></div>
           <div>
@@ -42,13 +42,42 @@
           </div>
         </div>
         <br />
-        <h1 id="tickets">120 🎟️</h1>
+        <h1 id="tickets">
+          <button class="empty" id="remove-ticket-btn">➖</button>
+          <span id="ticket-count">0 🎟️</span>
+          <button class="empty" id="ticket-btn">➕</button>
+        </h1>
       </div>
 
       <span class="label">Your Progress:</span>
       <div id="progress">
         <span id="current"></span>
         <span id="ideal"></span>
+      </div>
+      <div id="key">
+        <div class="current">
+          <div class="color"></div>
+          <span
+            >You are <span class="slackey" id="current-text">12%</span> on your way
+            to <span id="goal-text">150</span> tickets.</span
+          >
+        </div>
+        <div class="ideal">
+          <div class="color"></div>
+          <span
+            >You should be <span class="slackey" id="ideal-text"
+              >12% (18 🎟️)</span
+            > complete.</span
+          >
+        </div>
+        <div class="remaining">
+          <div class="color"></div>
+          <span
+            >You have <span class="slackey" id="remaining-text"
+              >88% (132 🎟️)</span
+            > left to get to your goal!
+          </span>
+        </div>
       </div>
     </section>
     <footer>
@@ -61,36 +90,119 @@
 </html>
 <script>
   const goal = document.getElementById("goal");
-  const tickets = 87;
-  const progress = document.getElementById("progress");
+  let tickets = 0;
+  const ticketCount = document.getElementById("ticket-count");
   const current = document.getElementById("current");
   const ideal = document.getElementById("ideal");
   const startDate = new Date("2024-06-18");
-  const endDate = document.getElementById("date");
+  const endDate = document.getElementById("date") as HTMLInputElement;
+  const currentText = document.getElementById("current-text");
+  const goalText = document.getElementById("goal-text");
+  const idealText = document.getElementById("ideal-text");
+  const remainingText = document.getElementById("remaining-text");
+  const ticketBtn = document.getElementById("ticket-btn");
+  const removeTicketBtn = document.getElementById("remove-ticket-btn");
 
-  if (!goal || !progress || !current || !ideal || !endDate) {
+  if (
+    !goal ||
+    !ticketCount ||
+    !current ||
+    !ideal ||
+    !endDate ||
+    !currentText ||
+    !goalText ||
+    !idealText ||
+    !remainingText ||
+    !ticketBtn ||
+    !removeTicketBtn
+  ) {
     throw new Error("Element not found.");
   }
+
+  let goalValue = parseInt(goal.value);
+  let currentPercent = Math.min((tickets / goalValue) * 100, 100);
+  let totalDays = Math.ceil(
+    (endDate.valueAsDate - startDate) / (1000 * 60 * 60 * 24)
+  );
+  let passedDays = Math.ceil((new Date() - startDate) / (1000 * 60 * 60 * 24));
+  let idealPercent = Math.min((passedDays / totalDays) * 100, 100);
+
   goal.onkeydown = function (evt) {
-    let code = evt.keyCode;
-    if (code > 31 && (code < 48 || code > 57)) {
-      return false;
+    if (evt.key === " " || (evt.key.length === 1 && !/\d/.test(evt.key))) {
+      evt.preventDefault();
     }
-    return true;
   };
   goal.onchange = function (evt) {
-    let value = parseInt(evt.target.value);
-    current.style.width = `${(tickets / value) * 100}%`;
+    goalValue = parseInt(evt.target.value);
+    currentPercent = Math.min((tickets / goalValue) * 100, 100);
 
-    const totalDays = Math.ceil(
-      (new Date(endDate.value) - startDate) / (1000 * 60 * 60 * 24)
-    );
-    const passedDays = Math.ceil(
-      (new Date() - startDate) / (1000 * 60 * 60 * 24)
-    );
-
-    ideal.style.width = `${(passedDays / totalDays) * 100}%`;
+    update();
   };
+  endDate.onchange = function (evt) {
+    totalDays = Math.ceil(
+      (endDate.valueAsDate - startDate) / (1000 * 60 * 60 * 24)
+    );
+    passedDays = Math.ceil((new Date() - startDate) / (1000 * 60 * 60 * 24));
+    idealPercent = Math.min((passedDays / totalDays) * 100, 100);
+
+    update();
+  };
+
+  function update() {
+    // TODO: necessary?
+    if (
+      !current ||
+      !ideal ||
+      !currentText ||
+      !goalText ||
+      !idealText ||
+      !remainingText
+    ) {
+      throw new Error("Element not found.");
+    }
+    current.style.width = `${currentPercent}%`;
+
+    ideal.style.width = `${idealPercent}%`;
+
+    if (currentPercent > idealPercent) {
+      ideal.style.zIndex = "1";
+      current.style.zIndex = "0";
+    } else {
+      ideal.style.zIndex = "0";
+      current.style.zIndex = "1";
+    }
+
+    currentText.innerText = `${Math.round(currentPercent)}%`;
+    goalText.innerText = `${goalValue}`;
+    idealText.innerText = `${Math.round(idealPercent)}% (${Math.round(
+      (idealPercent / 100) * goalValue
+    )} 🎟️)`;
+    remainingText.innerText = `${100 - Math.round(currentPercent)}% (${Math.round(
+      (1 - currentPercent / 100) * goalValue
+    )} 🎟️)`;
+  }
+
+  function addTicket() {
+    tickets++;
+    currentPercent = Math.min((tickets / goalValue) * 100, 100);
+    ticketCount.innerHTML = `${tickets} 🎟️`;
+
+    update();
+  }
+
+  function removeTicket() {
+    tickets--;
+    currentPercent = Math.min((tickets / goalValue) * 100, 100);
+    ticketCount.innerHTML = `${tickets} 🎟️`;
+
+    update();
+  }
+
+  ticketBtn.onclick = addTicket;
+  removeTicketBtn.onclick = removeTicket;
+  ticketCount.innerHTML = `${tickets} 🎟️`;
+
+  update();
 
   //progress.style.background = `linear-gradient(to right, #09afb4 0%, #09afb4 50%, #f3e5c3 50%, #f3e5c3 100%)`;
 </script>
@@ -134,6 +246,16 @@
 
       #tickets {
         font-size: 66px;
+        width: 130%;
+        position: relative;
+        left: -15%;
+
+        button {
+          font-size: 40px;
+          //padding-bottom: 13px;
+          position: relative;
+          bottom: 13px;
+        }
       }
 
       #inputs {
@@ -185,6 +307,31 @@
       }
     }
 
+    #key {
+      margin-left: 27.5%;
+      margin-top: 0.5rem;
+
+      .color {
+        width: 1rem;
+        height: 1rem;
+        display: inline-block;
+        margin-top: 0.2rem;
+        border-radius: 3px;
+      }
+
+      .current > .color {
+        background-color: #09afb4;
+      }
+
+      .ideal > .color {
+        background-color: #ff5c00;
+      }
+
+      .remaining > .color {
+        background-color: #f3e5c3;
+      }
+    }
+
     .label {
       display: block;
       margin-left: 27.5%;
@@ -224,6 +371,11 @@
       }
     }
 
+    .slackey {
+      font-family: "Slackey";
+      font-size: 1.025rem;
+    }
+
     .shadow {
       text-shadow:
         -4px -4px #faefd6,
@@ -259,6 +411,31 @@
         -10px -10px #09afb4;
       color: #ff5c00;
       font-size: 85px;
+    }
+  }
+
+  button.empty {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+    font-size: inherit;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    &:active {
+      animation: pulse 0.3s linear 1;
+    }
+  }
+
+  @keyframes pulse {
+    25% {
+      transform: scale(0.8);
+    }
+    75% {
+      transform: scale(1.3);
     }
   }
 
