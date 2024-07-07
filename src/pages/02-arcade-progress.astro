@@ -1,0 +1,318 @@
+---
+
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <script type="module" src="https://unpkg.com/rough-notation?module"
+    ></script>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Arcade Ticket Progress</title>
+  </head>
+  <body>
+    <h1 id="title">Database</h1>
+    <h1 id="count">02</h1>
+    <span id="description">A ticket counter for arcade. </span>
+    <br />
+    <section id="content">
+      <h1 class="shadow">Arcade</h1>
+      <h1>Ticket Counter</h1>
+
+      <div id="info">
+        <div id="inputs">
+          <div class="smol">
+            <label for="goal">Ticket Goal: </label>
+            <input type="number" id="goal" name="goal" />
+          </div>
+          <div class="vl"></div>
+          <div>
+            <label for="goal">End Date: </label>
+            <input
+              type="date"
+              id="date"
+              name="date"
+              value="2024-08-31"
+              max="2024-08-31"
+            />
+          </div>
+        </div>
+        <br />
+        <h1 id="tickets">120 🎟️</h1>
+      </div>
+    </section>
+    <footer>
+      &copy; {new Date().getFullYear()} Eny. <a
+        href="https://github.com/EnyCode/database"
+        >This website is open source!</a
+      >
+    </footer>
+  </body>
+</html>
+<script>
+  const goal = document.getElementById("goal");
+  if (!goal) {
+    throw new Error("Goal input not found.");
+  }
+  goal.onkeydown = function (evt) {
+    let code = evt.which ? evt.which : evt.keyCode;
+    if (code > 31 && (code < 48 || code > 57)) {
+      return false;
+    }
+    return true;
+  };
+</script>
+<style is:global lang="scss">
+  :root {
+    --text: #252525;
+    --text-dark-grey: #414141;
+    --text-grey: #6b6b6b;
+    --fun: #e9bc3f;
+  }
+
+  #content {
+    background-color: #fbefd6;
+    width: 100%;
+    height: 100vh;
+    padding-top: 5rem;
+    font-family: "Gaegu";
+    font-size: 1.4rem;
+
+    h1,
+    h2,
+    h3 {
+      color: #09afb4;
+      font-family: "Slackey";
+    }
+
+    h1 {
+      font-size: 50px;
+      margin: 0;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 50px;
+    }
+
+    #info {
+      width: 30%;
+      margin: auto;
+      margin-top: 3rem;
+
+      #tickets {
+        font-size: 66px;
+      }
+
+      #inputs {
+        margin: auto;
+        display: flex;
+        gap: 1.5rem;
+        width: max-content;
+
+        .vl {
+          border-left: 2px solid #000;
+          border-radius: 10px;
+          height: 5rem;
+          width: 0;
+        }
+
+        div {
+          width: fit-content;
+
+          &.smol {
+            margin-left: calc(5rem - 60px);
+          }
+
+          label {
+            width: 100%;
+            display: block;
+            text-align: center;
+          }
+          input {
+            background-color: #ede5d3;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            padding: 8px;
+            max-width: 60px;
+            font-size: inherit;
+            font-family: inherit;
+            display: block;
+            margin: auto;
+            text-align: center;
+
+            &#date {
+              max-width: 10rem;
+            }
+          }
+        }
+      }
+      h2 {
+        text-align: center;
+      }
+    }
+
+    .shadow {
+      text-shadow:
+        -4px -4px #faefd6,
+        -3px -3px #faefd6,
+        -2px -2px #faefd6,
+        -2px -2px #faefd6,
+        -1px -1px #faefd6,
+        -1px -1px #faefd6,
+        -1px -1px #faefd6,
+        1px 1px #faefd6,
+        1px 1px #faefd6,
+        1px 1px #faefd6,
+        2px 2px #faefd6,
+        4px 4px #faefd6,
+        3px 3px #faefd6,
+        -8px -8px #09afb4,
+        -6px -6px #09afb4,
+        -5px -5px #09afb4,
+        -4px -4px #09afb4,
+        -3px -3px #09afb4,
+        -2px -2px #09afb4,
+        2px 2px #09afb4,
+        3px 3px #09afb4,
+        5px 5px #09afb4,
+        4px 4px #09afb4,
+        7px 7px #09afb4,
+        6px 6px #09afb4,
+        8px 8px #09afb4,
+        -8px -8px #09afb4,
+        9px 9px #09afb4,
+        -9px -9px #09afb4,
+        10px 10px #09afb4,
+        -10px -10px #09afb4;
+      color: #ff5c00;
+      font-size: 85px;
+    }
+  }
+
+  // #region Fonts
+  @font-face {
+    font-family: "Slackey";
+    src: url("/fonts/arcade/Slackey-Regular.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Gaegu";
+    src: url("/fonts/arcade/Gaegu-Regular.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Minecraft";
+    src: url("/fonts/Minecraft.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  // #endregion
+
+  // #region Default stuff
+  #title {
+    text-align: center;
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+    margin-top: 6rem;
+    color: var(--text-dark-grey);
+  }
+
+  #count {
+    text-align: center;
+    font-size: 7rem;
+    font-family: "Minecraft";
+    margin-top: 0.5rem;
+    margin-left: 0.166ch;
+    margin-bottom: 0.5rem;
+  }
+
+  #description {
+    font-size: 1.25rem;
+    text-align: center;
+    font-weight: 600;
+    display: block;
+    color: var(--text-grey);
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 25%;
+    margin: 3rem auto;
+
+    li {
+      border-top: 1px solid var(--text-grey);
+      border-bottom: 1px solid var(--text-grey);
+      border-width: 2px;
+      padding: 1rem;
+      margin: 1.5rem 0;
+
+      .count {
+        font-family: "Minecraft";
+      }
+
+      .description {
+        font-size: 1rem;
+        color: var(--text-grey);
+      }
+    }
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 3rem;
+    color: var(--text-dark-grey);
+    font-size: 0.9rem;
+  }
+
+  a {
+    color: inherit;
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--underline-color);
+    transition: text-decoration-color 0.3s;
+
+    &:hover {
+      text-decoration-color: var(--underline-hover);
+    }
+  }
+
+  hr {
+    width: 50vw;
+    border-width: 2px;
+    border-radius: 1rem;
+    border-color: var(--text-grey);
+  }
+
+  html {
+    font-family: "iA Writer Mono", monospace;
+    background: #efefef;
+    background-size: 224px;
+    color: var(--text);
+  }
+  code {
+    font-family:
+      Menlo,
+      Monaco,
+      Lucida Console,
+      Liberation Mono,
+      DejaVu Sans Mono,
+      Bitstream Vera Sans Mono,
+      Courier New,
+      monospace;
+  }
+  // #endregion
+</style>
