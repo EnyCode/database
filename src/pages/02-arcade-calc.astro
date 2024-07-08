@@ -21,7 +21,6 @@ interface Props {
   <body>
     <h1 id="title">Database</h1>
     <h1 id="count">02</h1>
-    <span id="placeholder"></span>
     <span id="description">A ticket counter for arcade. </span>
     <br />
     <section id="content">
@@ -100,12 +99,16 @@ interface Props {
           <span class="stat-label">hours per day on average. </span>
         </div>
         <div>
-          <span class="stat" id="ideal-daily">5</span>
+          <span class="stat" id="ideal-daily">0</span>
           <span class="stat-label">ideal daily tickets. </span>
         </div>
         <div>
-          <span class="stat" id="days-left">54</span>
+          <span class="stat" id="days-left">0</span>
           <span class="stat-label">days left. </span>
+        </div>
+        <div>
+          <span class="stat" id="on-track">0</span>
+          <span class="stat-label">hours per day to get on track. </span>
         </div>
       </div>
       <dialog id="slack-dialog">
@@ -177,6 +180,7 @@ interface Props {
   const hoursPerDay = document.getElementById("hpd");
   const idealDaily = document.getElementById("ideal-daily");
   const daysLeft = document.getElementById("days-left");
+  const onTrack = document.getElementById("on-track");
 
   let slackId = localStorage.getItem("slackId");
   let apiKey = localStorage.getItem("apiKey");
@@ -199,6 +203,7 @@ interface Props {
     !hoursPerDay ||
     !idealDaily ||
     !daysLeft ||
+    !onTrack ||
     // should never error because we set a default value
     !endDate.valueAsDate
   ) {
@@ -260,7 +265,8 @@ interface Props {
       !remainingText ||
       !hoursPerDay ||
       !idealDaily ||
-      !daysLeft
+      !daysLeft ||
+      !onTrack
     ) {
       throw new Error("Element not found.");
     }
@@ -288,6 +294,9 @@ interface Props {
     hoursPerDay.innerHTML = `${Math.round((+tickets / passedDays) * 10) / 10}`;
     idealDaily.innerHTML = `${Math.round((goalValue / totalDays) * 10) / 10}`;
     daysLeft.innerHTML = `${totalDays - passedDays}`;
+    onTrack.innerHTML = `${
+      Math.round(((goalValue - +tickets) / (totalDays - passedDays)) * 10) / 10
+    }`;
   }
 
   function addTicket() {
@@ -796,8 +805,15 @@ interface Props {
 
   // #region Fonts
   @font-face {
+    font-family: "iA Writer Mono";
+    src: url("/database/fonts/iAWriterMonoS-Regular.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
     font-family: "Slackey";
-    src: url("/fonts/arcade/Slackey-Regular.woff2") format("woff2");
+    src: url("/database/fonts/arcade/Slackey-Regular.woff2") format("woff2");
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -805,7 +821,7 @@ interface Props {
 
   @font-face {
     font-family: "Gaegu";
-    src: url("/fonts/arcade/Gaegu-Regular.woff2") format("woff2");
+    src: url("/database/fonts/arcade/Gaegu-Regular.woff2") format("woff2");
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -813,7 +829,7 @@ interface Props {
 
   @font-face {
     font-family: "Minecraft";
-    src: url("/fonts/Minecraft.woff2") format("woff2");
+    src: url("/database/fonts/Minecraft.woff2") format("woff2");
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -821,20 +837,6 @@ interface Props {
   // #endregion
 
   // #region Default stuff
-  @keyframes count {
-    to {
-      top: -3rem;
-      right: 7rem;
-    }
-  }
-
-  @keyframes mobileCount {
-    to {
-      top: -1rem;
-      right: 3rem;
-      font-size: 3rem;
-    }
-  }
 
   #title {
     text-align: center;
@@ -848,24 +850,9 @@ interface Props {
     text-align: center;
     font-size: 7rem;
     font-family: "Minecraft";
-    right: 50%;
-    transform: translate(calc(50% + 7px), -1px);
-    top: 7.3rem;
-    position: fixed;
-    animation: count 1s ease-in-out forwards;
-    animation-play-state: paused;
-    animation-delay: calc(var(--scroll) * -1s);
-
-    @media (max-width: 768px) {
-      animation-duration: 0.5s;
-      animation-name: mobileCount;
-    }
-  }
-
-  #placeholder {
-    display: block;
-    height: 142px;
-    margin: auto;
+    margin-top: 0.5rem;
+    margin-left: 0.166ch;
+    margin-bottom: 0.5rem;
   }
 
   #description {

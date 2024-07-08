@@ -47,7 +47,7 @@ const { title, count, description } = Astro.props;
   // #region Fonts
   @font-face {
     font-family: "iA Writer Mono";
-    src: url("/fonts/iAWriterMonoS-Regular.woff2") format("woff2");
+    src: url("/database/fonts/iAWriterMonoS-Regular.woff2") format("woff2");
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -55,7 +55,7 @@ const { title, count, description } = Astro.props;
 
   @font-face {
     font-family: "Minecraft";
-    src: url("/fonts/Minecraft.woff2") format("woff2");
+    src: url("/database/fonts/Minecraft.woff2") format("woff2");
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -94,12 +94,17 @@ const { title, count, description } = Astro.props;
     width: 25%;
     margin: 3rem auto;
 
+    @media (max-width: 900px) {
+      width: 90%;
+    }
+
     li {
       border-top: 1px solid var(--text-grey);
       border-bottom: 1px solid var(--text-grey);
       border-width: 2px;
       padding: 1rem;
       margin: 1.5rem 0;
+      width: 100%;
 
       .count {
         font-family: "Minecraft";
@@ -135,6 +140,10 @@ const { title, count, description } = Astro.props;
     border-width: 2px;
     border-radius: 1rem;
     border-color: var(--text-grey);
+
+    @media (max-width: 900px) {
+      width: 80vw;
+    }
   }
 
   html {
