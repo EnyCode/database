@@ -23,7 +23,9 @@ const { title, count, description } = Astro.props;
     <title>{title} | Database</title>
   </head>
   <body>
-    <h1 id="title">Database</h1>
+    <h1 id="title">
+      <a href="/database" style="text-decoration: none;">Database</a>
+    </h1>
     <h1 id="count">{count.toString().padStart(2, "0")}</h1>
     <span id="description">{description}</span>
     <br />

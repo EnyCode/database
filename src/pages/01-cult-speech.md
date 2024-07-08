@@ -26,7 +26,10 @@ While the Family International does have widespread reach, they are only one of 
 
 In conclusion, the horrors that children experience in cults are stark reminders of the danger that awaits people throughout their whole lives. We have seen how cults prey on the innocent, who have nothing more left to give, and then scar them with the memories of trauma. Yet, we've also seen hope. Hope that, through education and support, we can create a world where children are protected, and cults are left as a remnant of the past. Now, we must use that hope to demand change. To demand a society free from fear. Free from abuse. Free from trauma. We owe it to ourselves and to each other to relegate cults to stories of the past.
 
-QnA:<br />
+<br />
+<hr style="width: 100%"/>
+<br />
+
 **What can be done to prevent people from joining cults in the first place?**
 
 If we want to stop people from joining cults, we need a multi-faceted approach. Firstly, education is extremely important. We need to teach people about the warning signs of cults, such as manipulation and control, and isolating members from their families. We can do this through awareness programs, such as on social media and physical posters, and other forms of educational programs. Furthermore, we need more support for vulnerable individuals who are most likely to be preyed upon by cults by raising awareness for where people can seek help, and create a culture where this is acceptable and not looked down upon.
