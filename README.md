@@ -1,47 +1,29 @@
-# Astro Starter Kit: Minimal
+<div align="center">
+  <img src="https://cloud-177476td4-hack-club-bot.vercel.app/0image.png" />
+  <h1>Database</h1>
+  A place for all my miscellaneous web pages.  
+</div>
+<br />
 
-```sh
-npm create astro@latest -- --template minimal
+A simple website for all my random stuff. Check it out [here](https://enycode.github.io/database).
+
+One cool page is my Arcade progress tracker. 
+| ![](https://cloud-q52ktd9p4-hack-club-bot.vercel.app/0image.png) | ![](https://cloud-3u6zdkiov-hack-club-bot.vercel.app/0image.png) |
+| :-: | :-: |
+
+## Features
+- [x] An index page!
+- [x] An easy to use layout
+- [x] Markdown support for writings
+- [x] Not much else...
+
+## Running
+If you have `npm` installed, just run:
 ```
-
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+npm install
+npm run dev
 ```
+and it'll be up and running on port 4321. Once it's up, check it [here](http://localhost:4321).
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## License
+Database is licensed under MPL 2.0 unless otherwise specified. 
